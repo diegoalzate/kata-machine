@@ -34,27 +34,53 @@ export default class DoublyLinkedList<T> {
         this.length += 1;
     }
 
+    // prepends node to the actual index
     insertAt(item: T, idx: number): void {
+        if (this.length <= idx) {
+            return;
+        }
+
+        if (idx === 0) {
+            this.prepend(item);
+            return;
+        } else if (idx === this.length - 1) {
+            this.append(item);
+            return;
+        }
+
+        // middle item
         let currentItem = this.head;
 
-        for (let i = 0; i < this.length; i++) {
-            if (!currentItem) {
-                const newNode: Node<T> = {
-                    value: item,
-                    prev: undefined,
-                    next: undefined,
-                };
+        const newNode: Node<T> = {
+            value: item,
+            prev: undefined,
+            next: undefined,
+        };
 
-                this.head = this.tail = newNode;
-                this.length += 1;
-                return;
-            }
-
+        for (let i = 0; currentItem && i < this.length; i++) {
             if (i === idx) {
-                currentItem.value = item;
+                // found the node
+                break;
             }
+
             currentItem = currentItem?.next;
         }
+
+        this.length += 1;
+
+        // ts stuff, possibly undefined but should always exist
+        if (!currentItem) return;
+
+        // place item into the new mix
+        newNode.next = currentItem;
+        newNode.prev = currentItem?.prev;
+        // swap old connections
+        const previousItem = currentItem.prev;
+        currentItem.prev = newNode;
+
+        // could be head and not have a previous
+        if (!previousItem) return;
+        previousItem.next = newNode;
 
         return;
     }

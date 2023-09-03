@@ -28,19 +28,43 @@ export default class SinglyLinkedList<T> {
         this.length += 1;
     }
 
+    // prepends node to the actual index
     insertAt(item: T, idx: number): void {
-        let currentNode = this.head;
-
-        for (let i = 0; i < this.length; i++) {
-            if (!currentNode) {
-                return;
-            }
-
-            if (i === idx) {
-                currentNode.value = item;
-            }
-            currentNode = currentNode.next;
+        if (this.length <= idx) {
+            return;
         }
+
+        if (idx === 0) {
+            this.prepend(item);
+            return;
+        } else if (idx === this.length - 1) {
+            this.append(item);
+            return;
+        }
+
+        // middle item
+        let currentItem = this.head;
+
+        const newNode: Node<T> = {
+            value: item,
+            next: undefined,
+        };
+
+        for (let i = 0; currentItem && i < this.length; i++) {
+            if (i === idx - 1) {
+                // found the node before the append
+                break;
+            }
+
+            currentItem = currentItem?.next;
+        }
+
+        // ts stuff, possibly undefined but should always exist
+        if (!currentItem) return;
+
+        this.length += 1;
+        newNode.next = currentItem?.next;
+        currentItem.next = newNode;
 
         return undefined;
     }
