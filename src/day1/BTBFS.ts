@@ -54,6 +54,8 @@ class Queue<T> {
     }
 }
 
+// Breadth first search, goes down the tree in levels and checks
+// on each level if it can find the value
 export default function bfs(head: BinaryNode<number>, needle: number): boolean {
     const q = new Queue<BinaryNode<number>>();
     q.enqueue(head);
