@@ -45,10 +45,14 @@ export default class MinHeap {
     }
 
     swapDown(index: number): Boolean {
+        if (index >= this.length) {
+            return true;
+        }
+
         const leftChildIndex = this.getLeftChild(index);
         const rightChildIndex = this.getRightChild(index);
 
-        if (leftChildIndex > this.length) {
+        if (leftChildIndex >= this.length) {
             return true;
         }
 
